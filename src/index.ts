@@ -26,7 +26,7 @@ const options: ConnectionOptions = {
 
 (async () => {
   try {
-    const project_id ='id_f'
+    const project_id ='id_b'
     const connection = await createConnection(options);
     let networkConfig = new NetworkConfig();
     networkConfig.project_id = project_id;
@@ -34,15 +34,21 @@ const options: ConnectionOptions = {
     networkConfig.status = 'Up';
   
     let postRepository = connection.getRepository(NetworkConfig);
-    await postRepository.save(networkConfig);
+    // await postRepository.save(networkConfig);
     
-    await postRepository.update(networkConfig, {
-      status: 'Exited'
-    });
+    // await postRepository.update(networkConfig, {
+    //   status: 'Exited'
+    // });
 
-    await postRepository.delete({
+    // await postRepository.delete({
+    //   project_id
+    // });
+
+    const hoge = await postRepository.find({
       project_id
-    });
+    })
+
+    console.log(hoge)
     
     await connection.close();
   } catch (error) {
