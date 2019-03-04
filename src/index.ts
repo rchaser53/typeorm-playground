@@ -26,14 +26,24 @@ const options: ConnectionOptions = {
 
 (async () => {
   try {
+    const project_id ='id_f'
     const connection = await createConnection(options);
     let networkConfig = new NetworkConfig();
-    networkConfig.project_id = "id_e";
+    networkConfig.project_id = project_id;
     networkConfig.port = 3001;
     networkConfig.status = 'Up';
   
     let postRepository = connection.getRepository(NetworkConfig);
     await postRepository.save(networkConfig);
+    
+    await postRepository.update(networkConfig, {
+      status: 'Exited'
+    });
+
+    await postRepository.delete({
+      project_id
+    });
+    
     await connection.close();
   } catch (error) {
     throw new Error(error)
