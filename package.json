@@ -1,0 +1,27 @@
+{
+  "name": "typeorm-playground",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npm run tsc && node dist/index.js",
+    "tsc": "tsc -p ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rchaser53/typeorm-playground.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rchaser53/typeorm-playground/issues"
+  },
+  "homepage": "https://github.com/rchaser53/typeorm-playground#readme",
+  "dependencies": {
+    "mysql2": "^1.6.5",
+    "reflect-metadata": "^0.1.13",
+    "typeorm": "^0.2.14",
+    "typescript": "^3.3.3333"
+  }
+}
