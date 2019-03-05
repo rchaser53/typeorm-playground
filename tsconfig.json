@@ -16,6 +16,6 @@
     "rootDir": "./src",
     "outDir": "dist/"
   },
-  "include": ["./**/*.ts"],
+  "include": ["./**/*.ts", "./migration/**/*.ts"],
   "exclude": ["node_modules", "stories", "vendor"]
 }
