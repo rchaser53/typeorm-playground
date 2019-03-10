@@ -1,16 +1,16 @@
 import "reflect-metadata";
 import { createConnection, Entity, ConnectionOptions, PrimaryColumn, Column} from "typeorm";
 
-@Entity()
-export class NetworkConfig {
+@Entity('test_table')
+export class TestTable {
     @PrimaryColumn("varchar")
-    project_id: string;
+    id: string;
 
     @Column({ nullable: false })
-    port: number;
+    num_field: number;
 
     @Column({ nullable: false })
-    status: string;
+    enum_field: string;
 }
 
 const options: ConnectionOptions = {
@@ -21,31 +21,31 @@ const options: ConnectionOptions = {
   "username": "root",
   "password": "root",
   "database": "test_database",
-  entities: [NetworkConfig]
+  entities: [TestTable]
 };
 
 (async () => {
   try {
-    const project_id ='id_b'
+    const id ='id_b'
     const connection = await createConnection(options);
-    let networkConfig = new NetworkConfig();
-    networkConfig.project_id = project_id;
-    networkConfig.port = 3001;
-    networkConfig.status = 'Up';
+    let networkConfig = new TestTable();
+    networkConfig.id = id;
+    networkConfig.num_field = 3001;
+    networkConfig.enum_field = 'aaa';
   
-    let postRepository = connection.getRepository(NetworkConfig);
+    let postRepository = connection.getRepository(TestTable);
     // await postRepository.save(networkConfig);
     
     // await postRepository.update(networkConfig, {
-    //   status: 'Exited'
+    //   status: 'bbb'
     // });
 
     // await postRepository.delete({
-    //   project_id
+    //   id
     // });
 
     const hoge = await postRepository.find({
-      project_id
+      id
     })
 
     console.log(hoge)
