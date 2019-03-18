@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import {  PrimaryGeneratedColumn, createConnection, OneToMany, JoinColumn,
-          Entity, ManyToOne, ConnectionOptions, PrimaryColumn, Column} from "typeorm";
+          getConnection, Entity, ManyToOne, ConnectionOptions, PrimaryColumn, Column} from "typeorm";
 
 @Entity('test_table')
 export class TestTable {
@@ -48,20 +48,21 @@ const options: ConnectionOptions = {
 
 (async () => {
   try {
-    const id ='id_c'
+    const id ='id_d'
     const connection = await createConnection(options);
-    const photoA = createPhoto('a', 'url-a', id)
+    await connection.transaction(async (transactionalEntityManager) => {
+      const photoA = createPhoto('a', 'url-a', id)
+      let testTable = new TestTable();
+      testTable.id = id;
+      testTable.num_field = 3001;
+      testTable.photos = [
+        createPhoto('a', 'url-a', id),
+      ];
 
-    let testTable = new TestTable();
-    testTable.id = id;
-    testTable.num_field = 3001;
-    testTable.photos = [
-      createPhoto('a', 'url-a', id),
-    ];
+      await transactionalEntityManager.save(testTable)
+      await transactionalEntityManager.save(photoA)
+    })
 
-    await connection.manager.save(photoA)
-    await connection.manager.save(testTable)
-    
     // await postRepository.update(testTable, {
     //   status: 'bbb'
     // });
