@@ -22,7 +22,7 @@
   "dependencies": {
     "mysql2": "^1.6.5",
     "reflect-metadata": "^0.1.13",
-    "typeorm": "^0.2.14",
+    "typeorm": "^0.2.15",
     "typescript": "^3.3.3333"
   }
 }

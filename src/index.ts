@@ -1,5 +1,6 @@
 import "reflect-metadata";
-import { createConnection, Entity, ConnectionOptions, PrimaryColumn, Column} from "typeorm";
+import {  PrimaryGeneratedColumn, createConnection, OneToMany, JoinColumn,
+          Entity, ManyToOne, ConnectionOptions, PrimaryColumn, Column} from "typeorm";
 
 @Entity('test_table')
 export class TestTable {
@@ -9,8 +10,22 @@ export class TestTable {
     @Column({ nullable: false })
     num_field: number;
 
-    @Column({ nullable: false })
-    enum_field: string;
+    @OneToMany(type => Photo, photo => photo.test_table)
+    readonly photos: Photo[];
+}
+
+@Entity('photos')
+export class Photo {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  url: string;
+
+  @ManyToOne(type => TestTable, test_table => test_table.photos)
+  @JoinColumn({ name: 'test_table_id' })
+  readonly test_table?: TestTable;
+
 }
 
 const options: ConnectionOptions = {
@@ -21,7 +36,7 @@ const options: ConnectionOptions = {
   "username": "root",
   "password": "root",
   "database": "test_database",
-  entities: [TestTable]
+  entities: [TestTable, Photo]
 };
 
 (async () => {
@@ -31,7 +46,10 @@ const options: ConnectionOptions = {
     let networkConfig = new TestTable();
     networkConfig.id = id;
     networkConfig.num_field = 3001;
-    networkConfig.enum_field = 'aaa';
+    // networkConfig.photos = [
+
+    // ]
+    // networkConfig.enum_field = 'aaa';
   
     let postRepository = connection.getRepository(TestTable);
     // await postRepository.save(networkConfig);
@@ -44,11 +62,11 @@ const options: ConnectionOptions = {
     //   id
     // });
 
-    const hoge = await postRepository.find({
-      id
-    })
+    // const hoge = await postRepository.find({
+    //   id
+    // })
 
-    console.log(hoge)
+    // console.log(hoge)
     
     await connection.close();
   } catch (error) {
