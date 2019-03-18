@@ -10,8 +10,8 @@ export class TestTable {
     @Column({ nullable: false })
     num_field: number;
 
-    @OneToMany(type => Photo, photo => photo.test_table)
-    readonly photos: Photo[];
+    @OneToMany(type => Photo, photo => photo.test_table_id)
+    photos: Photo[];
 }
 
 @Entity('photos')
@@ -24,8 +24,15 @@ export class Photo {
 
   @ManyToOne(type => TestTable, test_table => test_table.photos)
   @JoinColumn({ name: 'test_table_id' })
-  readonly test_table?: TestTable;
+  test_table_id?: TestTable;
+}
 
+const createPhoto = (id, url, test_table_id) => {
+  const photo = new Photo()
+  photo.id = id
+  photo.url = url
+  photo.test_table_id = test_table_id
+  return photo
 }
 
 const options: ConnectionOptions = {
@@ -41,20 +48,21 @@ const options: ConnectionOptions = {
 
 (async () => {
   try {
-    const id ='id_b'
+    const id ='id_c'
     const connection = await createConnection(options);
-    let networkConfig = new TestTable();
-    networkConfig.id = id;
-    networkConfig.num_field = 3001;
-    // networkConfig.photos = [
+    const photoA = createPhoto('a', 'url-a', id)
 
-    // ]
-    // networkConfig.enum_field = 'aaa';
-  
-    let postRepository = connection.getRepository(TestTable);
-    // await postRepository.save(networkConfig);
+    let testTable = new TestTable();
+    testTable.id = id;
+    testTable.num_field = 3001;
+    testTable.photos = [
+      createPhoto('a', 'url-a', id),
+    ];
+
+    await connection.manager.save(photoA)
+    await connection.manager.save(testTable)
     
-    // await postRepository.update(networkConfig, {
+    // await postRepository.update(testTable, {
     //   status: 'bbb'
     // });
 
